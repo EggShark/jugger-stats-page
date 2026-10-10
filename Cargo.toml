@@ -1,0 +1,10 @@
+[package]
+name = "jugger-stats"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+axum = "0.8.9"
+serde = "1.0.229" 
+tokio = {version = "1.53.2", features = ["macros","rt-multi-thread"]}
+tower-http = {version = "0.7.1", features = ["fs"]}
