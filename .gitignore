@@ -3,3 +3,7 @@
 
 # ignore complied JS
 /assets/js
+
+# file containing constring to database
+DBSECRET
+.env
