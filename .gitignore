@@ -1,1 +1,5 @@
 /target
+/node_modules
+
+# ignore complied JS
+/assets/js
