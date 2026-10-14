@@ -4,9 +4,5 @@
 # ignore complied JS
 /assets/js
 
-# file containing constring to database
-DBSECRET
-# contains encryption key for pasteo
-PASTEOSECRET
-# also contains conn string for sqlx
+# contains conn string for sqlx and PASETO Secret
 .env

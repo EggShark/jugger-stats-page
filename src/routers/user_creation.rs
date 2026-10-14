@@ -1,7 +1,7 @@
 use crate::AppState;
 
 use rusty_paseto::prelude::*;
-use sqlx::Error::{self as SqlError, Database};
+use sqlx::Error::Database;
 
 use argon2::PasswordHasher;
 use axum::extract::{Json, State};
@@ -9,7 +9,6 @@ use axum::http::StatusCode;
 use axum::response::IntoResponse;
 use serde::{Deserialize, Serialize};
 use sqlx::error::ErrorKind;
-use sqlx::postgres::PgDatabaseError;
 
 #[derive(Deserialize, Debug)]
 pub struct CreateUser {

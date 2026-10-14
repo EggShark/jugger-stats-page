@@ -1,4 +1,3 @@
-mod auth;
 mod routers;
 mod state;
 
@@ -8,7 +7,7 @@ use std::sync::Arc;
 use argon2::Argon2;
 use routers::create_routers;
 use rusty_paseto::prelude::*;
-use sqlx::{Connection, PgConnection, PgPool};
+use sqlx::PgPool;
 
 use crate::state::AppState;
 
