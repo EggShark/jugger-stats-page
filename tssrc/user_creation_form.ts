@@ -30,8 +30,11 @@ async function sendUserRequest(username: string, password: string) {
 	);
 
 	const content = await response.json();
-	// dont worry about it kitten :)
-	console.log(content);
+	if (content.Token != null) {
+		document.cookie = "session=" + content.Token;
+	}
+	// handle other cases yk
+
 }
 
 // not real constant cause we can't have anything nice in this world
