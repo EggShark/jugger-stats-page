@@ -1,5 +1,4 @@
 use crate::AppState;
-use crate::auth::PASTEO_SECRET;
 
 use rusty_paseto::prelude::*;
 use sqlx::Error::{self as SqlError, Database};
