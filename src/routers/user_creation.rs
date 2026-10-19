@@ -1,5 +1,5 @@
 use crate::AppState;
-use crate::routers::auth::{BasicAuthRequest, create_token};
+use crate::routers::auth::{BasicAuthRequest, UserNameError, create_token, username_validator};
 
 use sqlx::Error::Database;
 
@@ -18,12 +18,34 @@ enum CreateUserResponse {
     UserExists,
     // send db message
     OtherDb(String),
+    PasswordError(String),
+    UserNameError(UserNameError),
 }
 
 pub(super) async fn create_user(
     State(state): State<AppState>,
     Json(payload): Json<BasicAuthRequest>,
 ) -> impl IntoResponse {
+    // only restaint on password not sure if I really need any others
+    if payload.password.len() > 128 || payload.password.len() < 8 {
+        return (
+            StatusCode::BAD_REQUEST,
+            Json(CreateUserResponse::PasswordError(String::from(
+                "Password length must be between 8 and 128",
+            ))),
+        );
+    }
+
+    match username_validator(&payload.username) {
+        Ok(_) => {}
+        Err(e) => {
+            return (
+                StatusCode::BAD_REQUEST,
+                Json(CreateUserResponse::UserNameError(e)),
+            );
+        }
+    }
+
     let hashed_password = state
         .argon
         .hash_password(payload.password.as_bytes())
