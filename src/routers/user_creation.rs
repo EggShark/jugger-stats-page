@@ -1,6 +1,6 @@
 use crate::AppState;
+use crate::routers::auth::{BasicAuthRequest, create_token};
 
-use rusty_paseto::prelude::*;
 use sqlx::Error::Database;
 
 use argon2::PasswordHasher;
@@ -9,12 +9,6 @@ use axum::http::StatusCode;
 use axum::response::IntoResponse;
 use serde::{Deserialize, Serialize};
 use sqlx::error::ErrorKind;
-
-#[derive(Deserialize, Debug)]
-pub struct CreateUser {
-    username: String,
-    password: String,
-}
 
 #[derive(Serialize)]
 enum CreateUserResponse {
@@ -28,7 +22,7 @@ enum CreateUserResponse {
 
 pub(super) async fn create_user(
     State(state): State<AppState>,
-    Json(payload): Json<CreateUser>,
+    Json(payload): Json<BasicAuthRequest>,
 ) -> impl IntoResponse {
     let hashed_password = state
         .argon
@@ -74,12 +68,4 @@ fn sqlx_error_to_response(err: ErrorKind) -> StatusCode {
         ErrorKind::UniqueViolation => StatusCode::BAD_REQUEST,
         _ => StatusCode::INTERNAL_SERVER_ERROR,
     }
-}
-
-// move key to app state?
-fn create_token(username: &str, key: &PasetoSymmetricKey<V4, Local>) -> String {
-    PasetoBuilder::<V4, Local>::default()
-        .set_claim(CustomClaim::new("username", username).unwrap())
-        .build(key)
-        .unwrap()
 }
