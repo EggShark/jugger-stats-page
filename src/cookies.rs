@@ -1,10 +1,10 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use axum::{extract::Request, middleware::Next};
+use axum::{extract::Request, http::StatusCode, middleware::Next, response::Response};
 
 // middleware
-pub async fn parse_cookies(mut req: Request, next: Next) {
+pub async fn parse_cookies(mut req: Request, next: Next) -> Result<Response, StatusCode> {
     let headers = req.headers();
     let cookies = if let Some(cookies) = headers.get("Cookies").map(|v| v.to_str().ok()).flatten() {
         Cookies::from_cookie_str(cookies)
@@ -13,6 +13,8 @@ pub async fn parse_cookies(mut req: Request, next: Next) {
     };
 
     req.extensions_mut().insert(cookies);
+
+    Ok(next.run(req).await)
 }
 
 #[derive(Clone)]
