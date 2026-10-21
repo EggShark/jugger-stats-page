@@ -1,4 +1,4 @@
-const ILLEGAL_CHARACTERS = ['@', '!', '=', '&', '{', '$', '!', '\'', '`', ' ', '#', ':', '/', '\\'];
+const ALLOWED_CHARACTERS = ['-', '_', '+', '~', '.', '<', '>', '^', '%', ';'];
 
 async function processForm(e: Event) {
 	if (e.preventDefault) {
@@ -25,10 +25,10 @@ async function sendUserRequest(username: string, password: string) {
 		return;
 	}
 
-	for (const c of ILLEGAL_CHARACTERS) {
-		if (username.includes(c)) {
-			console.log("illegal character in username :(");
-			return;
+	for (let i = 0; i < username.length; i++) {
+		const code = username.charCodeAt(i);
+		if (!((code >= 48 && code <= 57) || (code >= 65 && code <= 90) || (code >= 97 && code <= 122)) && !ALLOWED_CHARACTERS.includes(username.charAt(i))) {
+			console.log("username contains illegal character: ", username.charAt(i));
 		}
 	}
 

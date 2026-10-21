@@ -35,7 +35,7 @@ impl Cookies {
 
         let pairs = line.split(";");
         for p in pairs {
-            let mut values = line.split("=");
+            let mut values = p.split("=");
 
             let Some(name) = values.next() else {
                 continue;
@@ -50,7 +50,7 @@ impl Cookies {
                 continue;
             }
 
-            cookies.insert(name.to_string(), value.to_string());
+            cookies.insert(name.trim().to_string(), value.trim().to_string());
         }
 
         Self {

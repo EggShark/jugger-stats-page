@@ -63,9 +63,7 @@ pub enum UserNameError {
     NonAscii,
 }
 
-const ILLEGAL_CHARACTERS: &[char] = &[
-    '@', '!', '=', '&', '{', '$', '!', '\'', '`', ' ', '#', ':', '/', '\\',
-];
+const ALLOWED_CHARACTERS: &[char] = &['-', '_', '+', '~', '.', '<', '>', '^', '%', ';'];
 
 pub fn username_validator(username: &str) -> Result<(), UserNameError> {
     let length = username.len();
@@ -79,10 +77,8 @@ pub fn username_validator(username: &str) -> Result<(), UserNameError> {
     }
 
     for uc in username.chars() {
-        for &c in ILLEGAL_CHARACTERS {
-            if uc == c {
-                return Err(IllegalCharacter(c));
-            }
+        if !uc.is_ascii_alphanumeric() && !ALLOWED_CHARACTERS.contains(&uc) {
+            return Err(IllegalCharacter(uc));
         }
     }
 
