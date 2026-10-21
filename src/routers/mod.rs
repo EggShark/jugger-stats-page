@@ -26,13 +26,14 @@ pub fn create_routers(state: AppState) -> Router {
         .route("/signin", post(sign_in))
         .route("/create_user", post(create_user))
         .route(
-            "/basic_data_request",
+            "/basic_data/{username}",
             get(get_basic_user_data)
-                .layer(middleware::from_fn(parse_cookies))
+                // middleware is bottom to top order???
                 .layer(middleware::from_fn_with_state(
                     state.clone(),
                     check_loged_in,
-                )),
+                ))
+                .layer(middleware::from_fn(parse_cookies)),
         )
         .with_state(state)
 }
