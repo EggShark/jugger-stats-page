@@ -16,7 +16,7 @@ use crate::state::AppState;
 
 #[derive(Clone, Serialize, Deserialize)]
 pub struct UserClaim {
-    username: String,
+    pub username: String,
     // other details
 }
 
