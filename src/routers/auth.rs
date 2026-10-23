@@ -1,5 +1,7 @@
+use std::convert::Infallible;
+
 use axum::Extension;
-use axum::extract::State;
+use axum::extract::{FromRequestParts, OptionalFromRequestParts, State};
 use axum::response::Response;
 use axum::{
     extract::Request,
@@ -14,33 +16,32 @@ use crate::cookies::Cookies;
 use crate::routers::auth::UserNameError::{IllegalCharacter, NonAscii};
 use crate::state::AppState;
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UserClaim {
     pub username: String,
     // other details
 }
 
-// reads a cookie and checks if they are a valid user or not at least according to us
-// used for APIs that what to know if user is a real user or not
-// not sutable for "secure" endpoints
-pub async fn check_loged_in(
-    State(state): State<AppState>,
-    Extension(cookies): Extension<Cookies>,
-    mut req: Request,
-    next: Next,
-) -> Result<Response, StatusCode> {
-    let value = cookies
-        .get_cookie("session")
-        // maybe need to handle errors but like if its not a valid key then like you aren't logged in
-        .and_then(|token| {
-            PasetoParser::<V4, Local>::default()
-                .parse_into::<UserClaim>(token, &state.paseto)
-                .ok()
-        });
+impl OptionalFromRequestParts<AppState> for UserClaim {
+    type Rejection = Infallible;
+    async fn from_request_parts(
+        parts: &mut axum::http::request::Parts,
+        state: &AppState,
+    ) -> Result<Option<Self>, Self::Rejection> {
+        // can't fail
+        let cookies = Cookies::from_request_parts(parts, state).await.unwrap();
 
-    req.extensions_mut().insert(value);
+        let value = cookies
+            .get_cookie("session")
+            // maybe need to handle errors but like if its not a valid key then like you aren't logged in
+            .and_then(|token| {
+                PasetoParser::<V4, Local>::default()
+                    .parse_into::<UserClaim>(token, &state.paseto)
+                    .ok()
+            });
 
-    Ok(next.run(req).await)
+        Ok(value)
+    }
 }
 
 pub fn create_token(username: &str, key: &PasetoSymmetricKey<V4, Local>) -> String {

@@ -17,7 +17,7 @@ pub struct BasicDataResponse {
 
 pub async fn get_basic_user_data(
     State(state): State<AppState>,
-    Extension(claims): Extension<Option<UserClaim>>,
+    claims: Option<UserClaim>,
     Path(username): Path<String>,
 ) -> impl IntoResponse {
     let data = match sqlx::query!(
@@ -34,6 +34,8 @@ pub async fn get_basic_user_data(
             return Err(StatusCode::INTERNAL_SERVER_ERROR);
         }
     };
+
+    println!("{:?}", claims);
 
     let response = BasicDataResponse {
         description: data.description.unwrap_or_default(),

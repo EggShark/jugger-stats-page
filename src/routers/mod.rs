@@ -9,8 +9,7 @@ use axum::{
 };
 use tower_http::services::{ServeDir, ServeFile};
 
-use crate::{cookies::parse_cookies, routers::sign_in::sign_in, state::AppState};
-use auth::check_loged_in;
+use crate::{routers::sign_in::sign_in, state::AppState};
 use user_creation::create_user;
 use user_data::get_basic_user_data;
 
@@ -25,15 +24,6 @@ pub fn create_routers(state: AppState) -> Router {
         .fallback_service(ServeDir::new("assets/html").html_as_default_extension(true))
         .route("/signin", post(sign_in))
         .route("/create_user", post(create_user))
-        .route(
-            "/basic_data/{username}",
-            get(get_basic_user_data)
-                // middleware is bottom to top order???
-                .layer(middleware::from_fn_with_state(
-                    state.clone(),
-                    check_loged_in,
-                ))
-                .layer(middleware::from_fn(parse_cookies)),
-        )
+        .route("/basic_data/{username}", get(get_basic_user_data))
         .with_state(state)
 }

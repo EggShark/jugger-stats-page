@@ -1,21 +1,9 @@
-use std::collections::HashMap;
 use std::sync::Arc;
+use std::{collections::HashMap, convert::Infallible};
 
-use axum::{extract::Request, http::StatusCode, middleware::Next, response::Response};
+use axum::extract::FromRequestParts;
 
-// middleware
-pub async fn parse_cookies(mut req: Request, next: Next) -> Result<Response, StatusCode> {
-    let headers = req.headers();
-    let cookies = if let Some(cookies) = headers.get("Cookies").map(|v| v.to_str().ok()).flatten() {
-        Cookies::from_cookie_str(cookies)
-    } else {
-        Cookies::new()
-    };
-
-    req.extensions_mut().insert(cookies);
-
-    Ok(next.run(req).await)
-}
+use crate::state::AppState;
 
 #[derive(Clone)]
 pub struct Cookies {
@@ -60,5 +48,27 @@ impl Cookies {
 
     pub fn get_cookie(&self, value: &str) -> Option<&String> {
         self.cookies.get(value)
+    }
+}
+
+impl FromRequestParts<AppState> for Cookies {
+    type Rejection = Infallible;
+
+    async fn from_request_parts(
+        parts: &mut axum::http::request::Parts,
+        _: &AppState,
+    ) -> Result<Cookies, Self::Rejection> {
+        let cookies = if let Some(cookies) = parts
+            .headers
+            .get("cookie")
+            .map(|v| v.to_str().ok())
+            .flatten()
+        {
+            Cookies::from_cookie_str(cookies)
+        } else {
+            Cookies::new()
+        };
+
+        Ok(cookies)
     }
 }
