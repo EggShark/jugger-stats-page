@@ -27,11 +27,62 @@ async function getBasicData() {
 	} else {
 		descripton_area.innerText = descripton;
 	}
+
+	if (is_owner) {
+		const container = document.getElementById("user-box") as HTMLDivElement;
+		const button = document.createElement("button") as HTMLButtonElement;
+		button.id = "edit";
+		button.innerText = "Click to Edit"
+		button.onclick = editDescription;
+
+		container.appendChild(button);
+	}
 }
 
 async function getAdvancedData() {
 	// more complicated queries from multiple parts
 }
+
+function editDescription() {
+
+	const button = document.getElementById("edit") as HTMLButtonElement;
+	const container = document.getElementById("user-box") as HTMLDivElement;
+	const descripton_area = document.getElementById("description") as HTMLParagraphElement;
+
+	button.innerText = "Submit";
+	const current_text = descripton_area.innerText;
+	const textBox = document.createElement("textarea") as HTMLTextAreaElement;
+	textBox.innerText = current_text;
+	textBox.id = descripton_area.id;
+
+	container.replaceChild(textBox, descripton_area);
+	button.onclick = submitEditRequest;
+
+
+	console.log("edit");
+}
+
+async function submitEditRequest() {
+	console.log("lmao lol even");
+	const textBox = document.getElementById("description") as HTMLTextAreaElement;
+	const text = textBox.innerText;
+
+	const res = await fetch("/change_user_description", {
+		method: "POST",
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ text: text, username: username })
+	});
+
+	if (res.status != 200) {
+		console.log("cope and seeth");
+		return;
+	}
+
+	// change elements back or refresh page idk :p
+}
+
 
 console.log("user pages!!!");
 getBasicData();
