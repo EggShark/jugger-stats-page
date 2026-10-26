@@ -1,13 +1,6 @@
 use std::convert::Infallible;
 
-use axum::Extension;
-use axum::extract::{FromRequestParts, OptionalFromRequestParts, State};
-use axum::response::Response;
-use axum::{
-    extract::Request,
-    http::{StatusCode, request},
-    middleware::Next,
-};
+use axum::extract::{FromRequestParts, OptionalFromRequestParts};
 use rusty_paseto::prelude::*;
 
 use serde::{Deserialize, Serialize};

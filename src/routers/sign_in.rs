@@ -1,4 +1,4 @@
-use argon2::{PasswordHasher, PasswordVerifier};
+use argon2::PasswordVerifier;
 use axum::extract::Json;
 use axum::http::StatusCode;
 use axum::response::Response;

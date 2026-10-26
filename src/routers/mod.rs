@@ -4,7 +4,7 @@ mod user_creation;
 mod user_data;
 
 use axum::{
-    Router, middleware,
+    Router,
     routing::{get, post},
 };
 use tower_http::services::{ServeDir, ServeFile};
