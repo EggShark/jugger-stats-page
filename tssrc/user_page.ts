@@ -1,5 +1,6 @@
 const pageURL = new URL(window.location.href);
 const username = pageURL.pathname.slice(pageURL.pathname.lastIndexOf("/") + 1, pageURL.pathname.length);
+let editing = false;
 
 async function getBasicData() {
 	// get username and bio
@@ -62,10 +63,25 @@ function editDescription() {
 	console.log("edit");
 }
 
+function backToView() {
+	const button = document.getElementById("edit") as HTMLButtonElement;
+	const container = document.getElementById("user-box") as HTMLDivElement;
+	const descripton_area = document.getElementById("description") as HTMLTextAreaElement;
+
+	button.innerText = "Edit";
+	button.onclick = editDescription;
+
+	const new_desciption_area = document.createElement("p") as HTMLParagraphElement;
+	new_desciption_area.innerText = descripton_area.value;
+	new_desciption_area.id = descripton_area.id;
+
+	container.replaceChild(new_desciption_area, descripton_area);
+}
+
 async function submitEditRequest() {
 	console.log("lmao lol even");
 	const textBox = document.getElementById("description") as HTMLTextAreaElement;
-	const text = textBox.innerText;
+	const text = textBox.value;
 
 	const res = await fetch("/change_user_description", {
 		method: "POST",
@@ -76,12 +92,13 @@ async function submitEditRequest() {
 	});
 
 	if (res.status != 200) {
-		console.log("cope and seeth");
+		console.log("cope and seeth ", res.status);
 		return;
 	}
-
+	backToView();
 	// change elements back or refresh page idk :p
 }
+
 
 
 console.log("user pages!!!");
