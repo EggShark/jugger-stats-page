@@ -83,6 +83,11 @@ async function submitEditRequest() {
 	const textBox = document.getElementById("description") as HTMLTextAreaElement;
 	const text = textBox.value;
 
+	if (text.length > 2000) {
+		console.log("TOO LONG!!!");
+		return;
+	}
+
 	const res = await fetch("/change_user_description", {
 		method: "POST",
 		headers: {

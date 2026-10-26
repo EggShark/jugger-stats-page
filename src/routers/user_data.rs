@@ -1,5 +1,4 @@
 use axum::{
-    Extension,
     extract::{Json, Path, State},
     http::StatusCode,
     response::IntoResponse,
@@ -64,6 +63,10 @@ pub async fn change_description(
 
     if claims.username != payload.username {
         return Err(StatusCode::UNAUTHORIZED);
+    }
+
+    if payload.text.len() > 2000 {
+        return Err(StatusCode::BAD_REQUEST);
     }
 
     match sqlx::query!(
