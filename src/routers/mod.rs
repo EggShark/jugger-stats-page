@@ -4,15 +4,17 @@ mod user_creation;
 mod user_data;
 
 use axum::{
-    Router, middleware,
+    Router,
     routing::{get, post},
 };
 use tower_http::services::{ServeDir, ServeFile};
 
-use crate::{routers::sign_in::sign_in, state::AppState};
+use crate::{
+    routers::{sign_in::sign_in, user_data::change_description},
+    state::AppState,
+};
 use user_creation::create_user;
 use user_data::get_basic_user_data;
-
 pub fn create_routers(state: AppState) -> Router {
     Router::new()
         .nest_service("/css", ServeDir::new("assets/css"))
@@ -24,6 +26,7 @@ pub fn create_routers(state: AppState) -> Router {
         .fallback_service(ServeDir::new("assets/html").html_as_default_extension(true))
         .route("/signin", post(sign_in))
         .route("/create_user", post(create_user))
+        .route("/change_user_description", post(change_description))
         .route("/basic_data/{username}", get(get_basic_user_data))
         .with_state(state)
 }
