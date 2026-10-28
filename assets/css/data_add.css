@@ -5,21 +5,22 @@
 	--berry-crush: hsla(341, 43%, 47%, 1);
 	--banana-cream: hsla(56, 85%, 67%, 1);
 }
-html {
-    margin: 0;
-    padding: 0;
+
+* {
+	margin: 0;
 }
 
-body {
+html, body {
     margin: 0;
     padding: 0;
+    height: 100%;
 }
 
 .data-bar-div {
 	width: 100%;
 	background-color: var(--berry-crush);
+	padding-left: 30px;
 }
-
 
 .data-bar-button {
 	background-color: var(--berry-crush);
@@ -27,6 +28,7 @@ body {
 	height: min(250px, 10vh);
 	font-size: 20px;
 	padding: 15px;
+	border: none;
 }
 
 .data-bar-button:hover {
@@ -37,6 +39,40 @@ body {
 	visibility: hidden;
 }
 
-.awesome {
-	height: 100px;
+.data-area {
+	background-color: var(--deep-sky-blue);
+	height: calc(100vh - 60px - min(250px, 10vh));
+	margin: 0;
+	padding: 30px 5vw;
+}
+
+.specific-area {
+	color: white;
+	background-color: var(--dark-teal);
+	padding: 5px;
+	border-radius: 10px;
+}
+
+.area-title-div {
+	border-style: solid;
+	border-color: var(--banana-cream);
+	border-width: 0px 0px 5px 0px;
+	padding-right: 10px;
+	width: fit-content;
+}
+
+.area-content-div {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	justify-content: center;
+	column-gap: 10px;
+}
+
+.player-form {
+	flex-grow: 1;
+}
+
+.player-list-area {
+	flex-grow: 1;
 }
