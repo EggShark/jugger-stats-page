@@ -1,0 +1,42 @@
+:root {
+	--deep-sky-blue: hsla(201, 100%, 64%, 1);
+	--dark-teal: hsla(195, 70%, 22%, 1);
+	--mint-leaf: hsla(162, 53%, 52%, 1);
+	--berry-crush: hsla(341, 43%, 47%, 1);
+	--banana-cream: hsla(56, 85%, 67%, 1);
+}
+html {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.data-bar-div {
+	width: 100%;
+	background-color: var(--berry-crush);
+}
+
+
+.data-bar-button {
+	background-color: var(--berry-crush);
+	color: white;
+	height: min(250px, 10vh);
+	font-size: 20px;
+	padding: 15px;
+}
+
+.data-bar-button:hover {
+	background-color: var(--dark-teal);
+}
+
+.hidden {
+	visibility: hidden;
+}
+
+.awesome {
+	height: 100px;
+}
