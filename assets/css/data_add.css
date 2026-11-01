@@ -17,18 +17,20 @@ html, body {
 }
 
 .data-bar-div {
-	width: 100%;
 	background-color: var(--berry-crush);
-	padding-left: 30px;
+	padding-left: 10vw;
+	height: min(100px, 8vh);
+	display: inline-block;
+	width: calc(100% - 10vw);
 }
 
 .data-bar-button {
 	background-color: var(--berry-crush);
 	color: white;
-	height: min(250px, 10vh);
 	font-size: 20px;
 	padding: 15px;
 	border: none;
+	height: 100%;
 }
 
 .data-bar-button:hover {
@@ -41,16 +43,19 @@ html, body {
 
 .data-area {
 	background-color: var(--deep-sky-blue);
-	height: calc(100vh - 60px - min(250px, 10vh));
+	height: calc(100vh - 60px - min(100px, 8vh));
 	margin: 0;
 	padding: 30px 5vw;
 }
 
 .specific-area {
-	color: white;
-	background-color: var(--dark-teal);
+	background-color: whitesmoke;
+	color: black;
+	border-color: var(--dark-teal);
+	border-style: solid;
 	padding: 5px;
-	border-radius: 10px;
+	border-width: 1px;
+	border-radius: 5px;
 }
 
 .area-title-div {
@@ -74,5 +79,5 @@ html, body {
 }
 
 .player-list-area {
-	flex-grow: 1;
+	flex-grow: 2;
 }

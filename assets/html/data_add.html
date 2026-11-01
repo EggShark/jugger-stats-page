@@ -18,12 +18,10 @@
 </head>
 <body>
 <div class="data-bar-div">
-	<span class="data-bar-span">
 		<button class="data-bar-button">Players</button>
 		<button class="data-bar-button">Teams</button>
 		<button class="data-bar-button">Events</button>
 		<button class="data-bar-button">Leauge Registrations</button>
-	</span>
 </div>
 <div class="data-area">
 	<div class="specific-area player-area-div">
@@ -33,18 +31,39 @@
 		<div class="area-content-div">
 			<div class="player-form">
 				<h3>Add Player</h3>
-				<form>
-					<input type="text" placeholder="Firstname Lastname">
+				<form autocomplete="off">
+					<label>Player Name:</label>
+					<input type="text" placeholder="Firstname Lastname" required>
+					<h3> add to team </h3>
+					<label>Team name:</label>
+					<input type="text" placeholder="team name">
+					<br>
+					<label>Jersey Number</label>
+					<input type="text" placeholder="Jersey Number">
+					<label>Jersey Name</label>
+					<input type="text" placeholder="Jersey Name">
+					<br>
 					<input type="submit" value="Add Player">
 				</form>
 			</div>
 			<div class="player-list-area">
+				<h3> Player List </h3>
 				<input>
 				<div class="player-results-area">
 					<div class="player-results-header">
 						<p>Name</p>
 						<p>player id</p>
 						<p>Most Recent Team</p>
+					</div>
+					<div class="player-results-list-div">
+						<ul class="player-results-list">
+							<li class="player-result-item">
+								<p> name </p>
+								<p> 123 </p>
+								<p> canaries </p>
+								<button>delete player</button>
+							</li>
+						</ul>
 					</div>
 				</div>
 			</div>
