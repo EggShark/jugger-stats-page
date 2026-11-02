@@ -15,6 +15,7 @@
             height: 100%;
         }
     </style>
+    <script src="/js/add_player.js" defer></script>
 </head>
 <body>
 <div class="data-bar-div">
@@ -31,18 +32,18 @@
 		<div class="area-content-div">
 			<div class="player-form">
 				<h3>Add Player</h3>
-				<form autocomplete="off" name="add-player-form">
+				<form autocomplete="off" id="add-player-form">
 					<label>Player Name:</label>
-					<input type="text" placeholder="Firstname Lastname" name="form-player-name" required>
+					<input type="text" placeholder="Firstname Lastname" id="form-player-name" name="form-player-name" required>
 					<input type="checkbox" name="add-to-team-check" id="add-to-team-check">
 					<h3> add to team </h3>
 					<label>Team name:</label>
-					<input type="text" placeholder="team name" name="form-team-name">
+					<input type="text" placeholder="team name" id="form-team-name" name="form-team-name">
 					<br>
 					<label>Jersey Number</label>
-					<input type="text" placeholder="Jersey Number" name="form-jersey-number">
+					<input type="text" placeholder="Jersey Number" id="form-jersey-number" name="form-jersey-number">
 					<label>Jersey Name</label>
-					<input type="text" placeholder="Jersey Name" name="form-jersey-name">
+					<input type="text" placeholder="Jersey Name" id="form-jersey-name" name="form-jersey-name">
 					<br>
 					<input type="submit" value="Add Player">
 				</form>

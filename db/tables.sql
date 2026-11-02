@@ -31,7 +31,8 @@ CREATE TABLE teams (
 
 CREATE TABLE leauge_registrations (
 	year INTEGER NOT NULL,
-	jersey_number INTEGER NOT NULL,
+	-- ANNOYING PEOPLE WITH LEADING ZEROS IN THEIR JERSERYS :(
+	jersey_number VARCHAR NOT NULL,
 	jersey_name VARCHAR NOT NULL,
 	player_id INTEGER NOT NULL REFERENCES players (player_id),
 	team_id INTEGER NOT NULL REFERENCES teams (team_id)
@@ -58,6 +59,11 @@ CREATE TABLE matches (
 -- no data on what players were enforcing in the CJL as of NOW I have plans,,,
 CREATE TABLE plays (
 	stones_elapsed INTEGER NOT NULL,
+	set INTEGER NOT NULL,
+	-- not unique across all plays but should be unique across
+	-- match_id. i.e match id doesn't have more than 1 play 1,
+	play_number INTEGER NOT NULL,
+	rerolled BOOLEAN NOT NULL,
 	match_id INTEGER NOT NULL REFERENCES matches (match_id),
 	scoring_player INTEGER NOT NULL REFERENCES players (player_id)
 );
