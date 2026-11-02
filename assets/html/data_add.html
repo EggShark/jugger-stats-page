@@ -31,40 +31,61 @@
 		<div class="area-content-div">
 			<div class="player-form">
 				<h3>Add Player</h3>
-				<form autocomplete="off">
+				<form autocomplete="off" name="add-player-form">
 					<label>Player Name:</label>
-					<input type="text" placeholder="Firstname Lastname" required>
+					<input type="text" placeholder="Firstname Lastname" name="form-player-name" required>
+					<input type="checkbox" name="add-to-team-check" id="add-to-team-check">
 					<h3> add to team </h3>
 					<label>Team name:</label>
-					<input type="text" placeholder="team name">
+					<input type="text" placeholder="team name" name="form-team-name">
 					<br>
 					<label>Jersey Number</label>
-					<input type="text" placeholder="Jersey Number">
+					<input type="text" placeholder="Jersey Number" name="form-jersey-number">
 					<label>Jersey Name</label>
-					<input type="text" placeholder="Jersey Name">
+					<input type="text" placeholder="Jersey Name" name="form-jersey-name">
 					<br>
 					<input type="submit" value="Add Player">
 				</form>
 			</div>
 			<div class="player-list-area">
 				<h3> Player List </h3>
-				<input>
+				<input placeholder="Search a players name">
 				<div class="player-results-area">
-					<div class="player-results-header">
-						<p>Name</p>
-						<p>player id</p>
-						<p>Most Recent Team</p>
-					</div>
-					<div class="player-results-list-div">
-						<ul class="player-results-list">
-							<li class="player-result-item">
-								<p> name </p>
-								<p> 123 </p>
-								<p> canaries </p>
-								<button>delete player</button>
-							</li>
-						</ul>
-					</div>
+					<table class="data-table">
+						<thead class="data-table-head">
+							<tr class="data-table-head">
+								<th>
+									Name
+								</th>
+								<th>
+									Player id
+								</th>
+								<th>
+									Most recent team
+								</th>
+								<th>
+									Remove player
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="data-table-entry">
+								<td>
+									Charlotte
+								</td>
+								<td>
+									123
+								</td>
+								<td>
+									Canaries
+								</td>
+								<td>
+									<button>Delete</button>
+								</td>
+							</tr>
+
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
