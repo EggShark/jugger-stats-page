@@ -9,6 +9,7 @@ use axum::{
 
 use crate::{cookies::Cookies, routers::auth::UserClaim, state::AppState};
 use rusty_paseto::prelude::*;
+use sqlx::Error as SqlError;
 
 async fn check_admin(
     State(state): State<AppState>,
@@ -26,14 +27,28 @@ async fn check_admin(
         return Err(StatusCode::UNAUTHORIZED);
     }
 
+    let value = value.unwrap();
+
     // get from woofever data base etc etc
+    let is_admin = match sqlx::query!(
+        "SELECT site_admin from USERS WHERE username = $1",
+        value.username
+    )
+    .fetch_one(&state.db_conn)
+    .await
+    {
+        Ok(v) => v.site_admin,
+        Err(SqlError::RowNotFound) => return Err(StatusCode::UNAUTHORIZED),
+        Err(_) => return Err(StatusCode::INTERNAL_SERVER_ERROR),
+    };
+
+    if !is_admin {
+        return Err(StatusCode::UNAUTHORIZED);
+    }
 
     Ok(next.run(req).await)
 }
 
-
-
-asdas
 // routes that require admin acess to use
 pub fn make_admin_routes(state: AppState) -> Router {
     Router::new()

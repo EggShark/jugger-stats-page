@@ -36,10 +36,10 @@ pub(super) async fn sign_in(
         .verify_password(data.password.as_bytes(), stored_password.as_str())
         .is_ok();
 
-    if correct_pass {
-        let token = create_token(&data.username, &state.paseto);
-        (StatusCode::OK, token).into_response()
-    } else {
-        StatusCode::UNAUTHORIZED.into_response()
+    if !correct_pass {
+        return StatusCode::UNAUTHORIZED.into_response();
     }
+
+    let token = create_token(&data.username, &state.paseto);
+    (StatusCode::OK, token).into_response()
 }

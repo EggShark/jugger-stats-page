@@ -11,12 +11,14 @@ use axum::{
 use tower_http::services::{ServeDir, ServeFile};
 
 use crate::{
-    routers::{sign_in::sign_in, user_data::change_description},
+    routers::{admin_routes::make_admin_routes, sign_in::sign_in, user_data::change_description},
     state::AppState,
 };
 use user_creation::create_user;
 use user_data::get_basic_user_data;
 pub fn create_routers(state: AppState) -> Router {
+    let admin_routes = make_admin_routes(state.clone());
+
     Router::new()
         .nest_service("/css", ServeDir::new("assets/css"))
         .nest_service("/js", ServeDir::new("assets/js"))
@@ -30,4 +32,5 @@ pub fn create_routers(state: AppState) -> Router {
         .route("/change_user_description", post(change_description))
         .route("/basic_data/{username}", get(get_basic_user_data))
         .with_state(state)
+        .merge(admin_routes)
 }
