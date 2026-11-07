@@ -1,7 +1,6 @@
 use argon2::PasswordVerifier;
 use axum::extract::Json;
 use axum::http::StatusCode;
-use axum::response::Response;
 use axum::{extract::State, response::IntoResponse};
 use sqlx::Error as SqlError;
 
@@ -12,7 +11,7 @@ use crate::state::AppState;
 pub(super) async fn sign_in(
     State(state): State<AppState>,
     Json(data): Json<BasicAuthRequest>,
-) -> Response {
+) -> impl IntoResponse {
     let stored_password = match sqlx::query!(
         "SELECT password FROM users WHERE username = $1",
         &data.username
@@ -22,10 +21,10 @@ pub(super) async fn sign_in(
     {
         Ok(v) => v.password,
         Err(SqlError::RowNotFound) => {
-            return StatusCode::NOT_FOUND.into_response();
+            return Err(StatusCode::NOT_FOUND);
         }
-        Err(e) => {
-            return (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response();
+        Err(_) => {
+            return Err(StatusCode::INTERNAL_SERVER_ERROR);
         }
     };
 
@@ -37,9 +36,9 @@ pub(super) async fn sign_in(
         .is_ok();
 
     if !correct_pass {
-        return StatusCode::UNAUTHORIZED.into_response();
+        return Err(StatusCode::UNAUTHORIZED);
     }
 
     let token = create_token(&data.username, &state.paseto);
-    (StatusCode::OK, token).into_response()
+    Ok(token)
 }

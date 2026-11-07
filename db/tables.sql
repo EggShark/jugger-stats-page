@@ -31,7 +31,7 @@ CREATE TABLE teams (
 );
 
 CREATE TABLE leauge_registrations (
-	year INTEGER NOT NULL,
+	date DATE NOT NULL,
 	-- ANNOYING PEOPLE WITH LEADING ZEROS IN THEIR JERSERYS :(
 	jersey_number VARCHAR NOT NULL,
 	jersey_name VARCHAR NOT NULL,

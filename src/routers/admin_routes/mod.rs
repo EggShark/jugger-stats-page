@@ -1,15 +1,19 @@
+mod add_player;
+
 use axum::{
     Router,
     extract::{Request, State},
     http::StatusCode,
     middleware::{self, Next},
     response::Response,
-    routing::Route,
+    routing::{Route, post},
 };
 
 use crate::{cookies::Cookies, routers::auth::UserClaim, state::AppState};
 use rusty_paseto::prelude::*;
 use sqlx::Error as SqlError;
+
+use add_player::add_player;
 
 async fn check_admin(
     State(state): State<AppState>,
@@ -52,6 +56,7 @@ async fn check_admin(
 // routes that require admin acess to use
 pub fn make_admin_routes(state: AppState) -> Router {
     Router::new()
+        .route("/admin/add_user", post(add_player))
         .layer(middleware::from_fn_with_state(state.clone(), check_admin))
         .with_state(state)
 }
