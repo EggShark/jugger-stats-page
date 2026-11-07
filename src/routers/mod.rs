@@ -1,3 +1,4 @@
+mod admin_routes;
 mod auth;
 mod sign_in;
 mod user_creation;

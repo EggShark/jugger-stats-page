@@ -11,6 +11,7 @@ CREATE TABLE users (
     username VARCHAR NOT NULL UNIQUE,
     password VARCHAR NOT NULL,
     description VARCHAR,
+    site_admin BOOLEAN NOT NULL,
     user_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY
 );
 
