@@ -18,6 +18,8 @@ pub struct AddPlayerReq {
 }
 
 const PLAYER_NAME_LIMIT: usize = 50;
+const JERSEY_NAME_LIMIT: usize = 32;
+const JERSEY_NUMBER_LIMIT: usize = 4;
 
 // no need user claims we know you are an admin rn
 pub async fn add_player(
@@ -48,6 +50,13 @@ pub async fn add_player(
         (Some(t), Some(num), Some(name)) => (t, num, name),
         _ => return Err(StatusCode::BAD_REQUEST),
     };
+
+    if player_jersey_name.len() > JERSEY_NAME_LIMIT
+        || player_jersey_num.len() > JERSEY_NUMBER_LIMIT
+        || !player_jersey_num.chars().all(char::is_numeric)
+    {
+        return Err(StatusCode::BAD_REQUEST);
+    }
 
     match sqlx::query!(
         "INSERT INTO leauge_registrations VALUES (current_date, $1, $2, $3, $4)",

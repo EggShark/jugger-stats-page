@@ -1,8 +1,8 @@
 interface AddPlayerReq {
-	playerName: string,
-	playerTeam?: string,
-	playerJerseyNum?: string,
-	playerJerseyName?: string,
+	player_name: string,
+	player_team_id?: number,
+	player_jersey_num?: string,
+	player_jersey_name?: string,
 }
 
 async function addPlayer() {
@@ -18,11 +18,11 @@ async function addPlayer() {
 	}
 
 	const reqBody: AddPlayerReq = {
-		playerName: name,
+		player_name: name,
 	};
 	// do more stuff
 	if (addToTeam.checked) {
-		const teamName = formData.get("form-team-name") as string;
+		const teamId = formData.get("form-team-name") as string;
 		const jerseyNum = formData.get("form-jersey-number") as string;
 		const jerseyName = formData.get("form-jersey-name") as string;
 
@@ -32,22 +32,27 @@ async function addPlayer() {
 			return;
 		}
 
+		if (!/^[0-9]+$/.test(teamId)) {
+			addPlayerFormError(document.getElementById("form-team-name")!, "team id must be a number");
+			return;
+		}
+
 		if (jerseyName.length == 0) {
 			addPlayerFormError(document.getElementById("form-jersey-name")!, "jersey name cannot be empty");
 			return;
 		}
 
-		if (teamName.length == 0) {
+		if (teamId.length == 0) {
 			addPlayerFormError(document.getElementById("form-team-name")!, "team name cannot be empty");
 			return;
 		}
 
-		reqBody.playerTeam = teamName;
-		reqBody.playerJerseyNum = jerseyNum;
-		reqBody.playerJerseyNum = jerseyName;
+		reqBody.player_team_id = +teamId;
+		reqBody.player_jersey_num = jerseyNum;
+		reqBody.player_jersey_name = jerseyName;
 	}
 
-	const res = await fetch("/add_jugger_player", {
+	const res = await fetch("/admin/add_player", {
 		method: "POST",
 		headers: {
 			'Content-Type': 'application/json'
