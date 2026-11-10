@@ -4,7 +4,7 @@ use axum::{
     response::IntoResponse,
 };
 use serde::Deserialize;
-use sqlx::Error as SqlError;
+use sqlx::{Error as SqlError, postgres::PgDatabaseError};
 
 use crate::{routers::auth::UserClaim, state::AppState};
 
@@ -48,6 +48,7 @@ pub async fn add_player(
         data.player_jersey_name,
     ) {
         (Some(t), Some(num), Some(name)) => (t, num, name),
+        (None, None, None) => return Ok(StatusCode::OK),
         _ => return Err(StatusCode::BAD_REQUEST),
     };
 
@@ -70,6 +71,13 @@ pub async fn add_player(
     {
         Ok(_) => Ok(StatusCode::OK),
         Err(SqlError::InvalidArgument(_)) => Err(StatusCode::BAD_REQUEST),
+        Err(SqlError::Database(v)) => {
+            if v.is_foreign_key_violation() {
+                Err(StatusCode::BAD_REQUEST)
+            } else {
+                Err(StatusCode::INTERNAL_SERVER_ERROR)
+            }
+        }
         Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
     }
 }
