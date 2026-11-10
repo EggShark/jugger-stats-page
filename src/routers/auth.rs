@@ -57,7 +57,7 @@ pub enum UserNameError {
     NonAscii,
 }
 
-const ALLOWED_CHARACTERS: &[char] = &['-', '_', '+', '~', '.', '<', '>', '^', '%', ';'];
+const ALLOWED_CHARACTERS: &[char] = &['-', '_', '+', '~', '.', '<', '>', '!', '#', '[', ']'];
 
 pub fn username_validator(username: &str) -> Result<(), UserNameError> {
     let length = username.len();

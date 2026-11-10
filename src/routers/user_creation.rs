@@ -55,7 +55,7 @@ pub(super) async fn create_user(
     // HASH PASSWORD
     // RETURN COOKIE?
     match sqlx::query!(
-        "INSERT INTO users VALUES ($1, $2)",
+        "INSERT INTO users (username, password, site_admin) VALUES ($1, $2, false)",
         payload.username,
         hashed_password
     )
