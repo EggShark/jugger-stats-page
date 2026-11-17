@@ -16,16 +16,17 @@
         }
     </style>
     <script src="/js/add_player.js" defer></script>
+    <script src="js/data_entry_front.js" defer></script>
 </head>
 <body>
 <div class="data-bar-div">
-		<button class="data-bar-button">Players</button>
-		<button class="data-bar-button">Teams</button>
-		<button class="data-bar-button">Events</button>
-		<button class="data-bar-button">Leauge Registrations</button>
+		<button class="data-bar-button" id="player-nav-button">Players</button>
+		<button class="data-bar-button" id="team-nav-button">Teams</button>
+		<button class="data-bar-button" id="event-nav-button">Events</button>
+		<button class="data-bar-button" id="registration-nav-button">Leauge Registrations</button>
 </div>
 <div class="data-area">
-	<div class="specific-area player-area-div">
+	<div class="specific-area player-area-div" id="player-data-div">
 		<div class="area-title-div">
 			<h2>Manage Players</h2>
 		</div>
@@ -91,13 +92,13 @@
 			</div>
 		</div>
 	</div>
-	<div class="team-area-div hidden">
+	<div class="team-area-div hidden" id="team-data-div">
 		<p> hi im the team area </p>
 	</div>
-	<div class="event-area-div hidden">
+	<div class="event-area-div hidden" id="event-data-div">
 		<p> hi im the event area div </p>
 	</div>
-	<div class="registration-area-div hidden">
+	<div class="registration-area-div hidden" id="registration-data-div">
 		<p> hi im the registration area div </p>
 	</div>
 </div>
