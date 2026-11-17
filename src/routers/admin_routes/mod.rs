@@ -1,4 +1,5 @@
 mod add_player;
+mod add_team;
 
 use axum::{
     Router,
@@ -14,6 +15,7 @@ use rusty_paseto::prelude::*;
 use sqlx::Error as SqlError;
 
 use add_player::add_player;
+use add_team::add_team;
 
 async fn check_admin(
     State(state): State<AppState>,
@@ -57,6 +59,7 @@ async fn check_admin(
 pub fn make_admin_routes(state: AppState) -> Router {
     Router::new()
         .route("/admin/add_player", post(add_player))
+        .route("/admin/add_team", post(add_team))
         .layer(middleware::from_fn_with_state(state.clone(), check_admin))
         .with_state(state)
 }
