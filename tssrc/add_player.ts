@@ -1,8 +1,12 @@
 interface AddPlayerReq {
 	player_name: string,
-	player_team_id?: number,
-	player_jersey_num?: string,
-	player_jersey_name?: string,
+	player_team_info?: PlayerTeamInfo,
+}
+
+interface PlayerTeamInfo {
+	player_team_id: number,
+	player_jersey_num: string,
+	player_jersey_name: string,
 }
 
 async function addPlayer() {
@@ -47,9 +51,11 @@ async function addPlayer() {
 			return;
 		}
 
-		reqBody.player_team_id = +teamId;
-		reqBody.player_jersey_num = jerseyNum;
-		reqBody.player_jersey_name = jerseyName;
+		const teamInfo: PlayerTeamInfo = {
+			player_team_id: +teamId,
+			player_jersey_num: jerseyNum,
+			player_jersey_name: jerseyName
+		};
 	}
 
 	const res = await fetch("/admin/add_player", {

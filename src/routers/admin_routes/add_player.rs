@@ -11,10 +11,14 @@ use crate::{routers::auth::UserClaim, state::AppState};
 #[derive(Deserialize)]
 pub struct AddPlayerReq {
     player_name: String,
-    // wrap into inner struct?
-    player_team_id: Option<i32>,
-    player_jersey_num: Option<String>,
-    player_jersey_name: Option<String>,
+    player_team_info: Option<PlayerTeamInfo>,
+}
+
+#[derive(Deserialize)]
+pub struct PlayerTeamInfo {
+    player_team_id: i32,
+    player_jersey_num: String,
+    player_jersey_name: String,
 }
 
 const PLAYER_NAME_LIMIT: usize = 50;
@@ -42,29 +46,25 @@ pub async fn add_player(
         Err(_) => return Err(StatusCode::INTERNAL_SERVER_ERROR),
     };
 
-    let (player_team, player_jersey_num, player_jersey_name) = match (
-        data.player_team_id,
-        data.player_jersey_num,
-        data.player_jersey_name,
-    ) {
-        (Some(t), Some(num), Some(name)) => (t, num, name),
-        (None, None, None) => return Ok(StatusCode::OK),
-        _ => return Err(StatusCode::BAD_REQUEST),
-    };
+    if data.player_team_info.is_none() {
+        return Ok(StatusCode::OK);
+    }
 
-    if player_jersey_name.len() > JERSEY_NAME_LIMIT
-        || player_jersey_num.len() > JERSEY_NUMBER_LIMIT
-        || !player_jersey_num.chars().all(char::is_numeric)
+    let team_info = data.player_team_info.unwrap();
+
+    if team_info.player_jersey_name.len() > JERSEY_NAME_LIMIT
+        || team_info.player_jersey_num.len() > JERSEY_NUMBER_LIMIT
+        || !team_info.player_jersey_num.chars().all(char::is_numeric)
     {
         return Err(StatusCode::BAD_REQUEST);
     }
 
     match sqlx::query!(
         "INSERT INTO leauge_registrations VALUES (current_date, $1, $2, $3, $4)",
-        player_jersey_num,
-        player_jersey_name,
+        team_info.player_jersey_num,
+        team_info.player_jersey_name,
         player_id,
-        player_team
+        team_info.player_team_id
     )
     .execute(&state.db_conn)
     .await
