@@ -1,0 +1,2 @@
+WITH team_registrations AS (SELECT t.name, lr.player_id, lr.date FROM teams as t JOIN leauge_registrations as lr ON lr.team_id = t.team_id)
+SELECT DISTINCT ON(p.player_id) p.name, p.player_id, tr.name as team_name FROM players as p LEFT JOIN team_registrations as tr ON p.player_id = tr.player_id ORDER BY p.player_id, tr.date DESC;
