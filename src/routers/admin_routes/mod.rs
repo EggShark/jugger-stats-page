@@ -1,5 +1,6 @@
 mod add_player;
 mod add_team;
+mod data_fetchers;
 
 use axum::{
     Router,
@@ -7,7 +8,7 @@ use axum::{
     http::StatusCode,
     middleware::{self, Next},
     response::Response,
-    routing::{Route, post},
+    routing::{Route, get, post},
 };
 
 use crate::{cookies::Cookies, routers::auth::UserClaim, state::AppState};
@@ -16,6 +17,7 @@ use sqlx::Error as SqlError;
 
 use add_player::add_player;
 use add_team::add_team;
+use data_fetchers::{get_players, get_teams};
 
 async fn check_admin(
     State(state): State<AppState>,
@@ -60,6 +62,8 @@ pub fn make_admin_routes(state: AppState) -> Router {
     Router::new()
         .route("/admin/add_player", post(add_player))
         .route("/admin/add_team", post(add_team))
+        .route("/admin/get_teams", get(get_teams))
+        .route("/admin/get_players", get(get_players))
         .layer(middleware::from_fn_with_state(state.clone(), check_admin))
         .with_state(state)
 }
