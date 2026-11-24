@@ -1,4 +1,5 @@
 mod add_player;
+mod add_registration;
 mod add_team;
 mod data_fetchers;
 
@@ -11,7 +12,11 @@ use axum::{
     routing::{Route, get, post},
 };
 
-use crate::{cookies::Cookies, routers::auth::UserClaim, state::AppState};
+use crate::{
+    cookies::Cookies,
+    routers::{admin_routes::add_registration::register_player, auth::UserClaim},
+    state::AppState,
+};
 use rusty_paseto::prelude::*;
 use sqlx::Error as SqlError;
 
@@ -62,6 +67,7 @@ pub fn make_admin_routes(state: AppState) -> Router {
     Router::new()
         .route("/admin/add_player", post(add_player))
         .route("/admin/add_team", post(add_team))
+        .route("/admin/register_player", post(register_player))
         .route("/admin/get_teams", get(get_teams))
         .route("/admin/get_players", get(get_players))
         .layer(middleware::from_fn_with_state(state.clone(), check_admin))
